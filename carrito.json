@@ -7,5 +7,18 @@
         "quantity": 18
       }
     ]
+  },
+  {
+    "id": "e32e42a0-048b-463c-9ecd-1e6fd698ecff",
+    "products": [
+      {
+        "productoIds": "a8ad5e42-7407-46e5-9805-f2efff79cda6",
+        "quantity": 11
+      }
+    ]
+  },
+  {
+    "id": "da4a36ff-7bba-446d-9bdb-411bb2b1e0a6",
+    "products": []
   }
 ]
