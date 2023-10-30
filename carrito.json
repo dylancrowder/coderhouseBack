@@ -19,6 +19,11 @@
   },
   {
     "id": "da4a36ff-7bba-446d-9bdb-411bb2b1e0a6",
-    "products": []
+    "products": [
+      {
+        "productoIds": "a8ad5e42-7407-46e5-9805-f2efff79cda6",
+        "quantity": 6
+      }
+    ]
   }
 ]

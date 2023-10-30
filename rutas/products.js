@@ -61,6 +61,8 @@ router.put("/productos/:id", async (req, res) => {
     const productoRequerido = await productos.readProducts();
 
     // Busca el índice del producto en el arreglo
+    if (condition) {
+    }
     const index = productoRequerido.findIndex((product) => product.id === id);
 
     if (index === -1) {
@@ -71,7 +73,7 @@ router.put("/productos/:id", async (req, res) => {
     // Actualiza el producto
     productoRequerido[index] = {
       ...productoRequerido[index],
-      ...updatedProduct,
+      ...updatedProduct
     };
 
     // Escribe el producto actualizado (asegúrate de que la función writeProducts funcione correctamente)
