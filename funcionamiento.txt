@@ -27,6 +27,10 @@ Productos:
         Método: DELETE
         Ruta: http://localhost:8080/api/productos/:id
 
+        WEBSOCKET
+http://localhost:8080/api/realtimeproducts
+
+
 Carritos:
 
     Crear Carrito
@@ -44,3 +48,9 @@ Carritos:
     Agregar Producto al Carrito
         Método: POST
         Ruta: http://localhost:8080/api/:cdi/producto/:pid
+
+
+
+
+
+
