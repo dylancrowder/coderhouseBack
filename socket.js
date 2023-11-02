@@ -26,10 +26,8 @@ export const init = (httpServer) => {
           ...newProduct,
           id: uuidv4()
         };
-        // Agregar el nuevo producto a la lista de productos
-        products.push(newProducts);
 
-        // Guardar la lista actualizada en el archivo JSON
+        products.push(newProducts);
         await fs.writeFile(productoFilePath, JSON.stringify(products, null, 2));
 
         // Emitir la lista actualizada a todos los clientes conectados
@@ -38,5 +36,36 @@ export const init = (httpServer) => {
         console.error(error);
       }
     });
+
+
+
+
+socketClient.on("delete-product", async (productId) => {
+    try {
+      // Encuentra el índice del producto que coincide con el ID proporcionado
+      const productIndex = products.findIndex(
+        (product) => product.id === productId
+      );
+
+      if (productIndex !== -1) {
+        // Elimina el producto del array
+        products.splice(productIndex, 1);
+
+        // Guarda la lista de productos actualizada en el archivo JSON
+        await fs.writeFile(productoFilePath, JSON.stringify(products, null, 2));
+
+        // Emitir la lista actualizada a todos los clientes conectados
+        io.emit("product-list", products);
+      } else {
+        console.log(`Producto con ID ${productId} no encontrado.`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   });
+
+
+  });
+
+  
 };

@@ -1,32 +1,18 @@
 [
   {
-    "title": "dsdsdsddsdsdssdsd",
-    "description": "trtrtdsddsdsdsdsd",
-    "code": "ertertdsdsdsdsddsdsd",
-    "stock": "dsdsd"
-  },
-  {
-    "title": "sds",
-    "description": "ds",
-    "thumbnail": "ds",
-    "code": "ds",
-    "stock": "sds",
-    "id": 2323
+    "title": "adidas",
+    "description": "zapatillas blancas",
+    "thumbnail": "asdas",
+    "code": "3232",
+    "stock": "10",
+    "id": "8f36c264-0d83-4c37-9746-e5be7ba20982"
   },
   {
     "title": "vans",
-    "description": "hola",
-    "thumbnail": "no teng",
-    "code": "3434",
-    "stock": "2323",
-    "id": "c822c518-e746-4c10-b768-23bafcd9bb04"
-  },
-  {
-    "title": "dsdsdsddsdsdssds",
-    "description": "trtrtdsddsdsdsdsdsds",
-    "thumbnail": "ertretrsdsdsdsd",
-    "code": "ertertdsdsdsdsddsdsd",
-    "stock": "ertertdsdssdsddd",
-    "id": "2a3b7fd0-1b58-4bf5-b447-0893babf1bb5"
+    "description": "azules",
+    "thumbnail": "dsds",
+    "code": "6060",
+    "stock": "6060",
+    "id": "80581563-3875-4b70-aeb1-83361c79d07b"
   }
 ]

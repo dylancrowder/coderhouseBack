@@ -1,4 +1,3 @@
-
 const socket = io();
 
 let product;
@@ -15,8 +14,7 @@ document.getElementById("form-products").addEventListener("submit", (event) => {
     description: description.value,
     thumbnail: thumbnail.value,
     code: code.value,
-    stock: stock.value,
-    
+    stock: stock.value
   };
 
   // Emitir el nuevo producto al servidor a través del socket
@@ -62,6 +60,16 @@ socket.on("product-list", (productsData) => {
     const id = document.createElement("p");
     id.innerText = `id: ${product.id}`;
 
+    const deleteButton = document.createElement("button");
+    deleteButton.innerText = "Eliminar";
+    deleteButton.addEventListener("click", () => {
+      // Emitir el evento de eliminación al servidor con el ID del producto
+      socket.emit("delete-product", product.id);
+    });
+
+    productElement.appendChild(deleteButton);
+
+    listProducts.appendChild(productElement);
     productElement.appendChild(title);
     productElement.appendChild(description);
     productElement.appendChild(thumbnail);
