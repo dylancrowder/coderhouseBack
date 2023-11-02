@@ -1,11 +1,12 @@
-const express = require("express");
-const fs = require("fs").promises;
+import express from "express";
+import { promises as fs } from "fs";
+import { v4 as uuidv4 } from "uuid";
+import { ProductManager } from "./claseproduct.js";
+
 const router = express.Router();
-const { ProductManager } = require("./claseproduct.js");
 const productos = new ProductManager();
-const { v4: uuidv4 } = require("uuid");
 const carritoFilePath = "./carrito.json";
-const productoFilePath = "./productos.txt";
+const productoFilePath = "./productos.json";
 
 /* CREA UN CARTS NUEVO */
 router.post("/carts", async (req, res) => {
@@ -15,7 +16,7 @@ router.post("/carts", async (req, res) => {
 
     const nuevoCarrito = {
       id: uuidv4(),
-      products: req.body.products || [],
+      products: req.body.products || []
     };
 
     carritos.push(nuevoCarrito);
@@ -52,18 +53,16 @@ router.get("/carts/:cid", async (req, res) => {
 
 /* RUTA PARA ELIMINAR */
 router.delete("/carts/:cid", async (req, res) => {
-  const id = req.params.cid; // Corregir el nombre del parámetro
+  const id = req.params.cid;
   const data = await fs.readFile(carritoFilePath, "utf8");
 
   try {
-    const elementos = JSON.parse(data); // Parsear los datos
-    // Filtrar la matriz de elementos para mantener solo los que no coinciden con el ID
+    const elementos = JSON.parse(data);
     const elementosFiltrados = elementos.filter(
       (elemento) => elemento.id !== id
     );
 
     if (elementosFiltrados.length < elementos.length) {
-      // Escribir los elementos filtrados de nuevo en el archivo
       await fs.writeFile(
         carritoFilePath,
         JSON.stringify(elementosFiltrados, null, 2)
@@ -73,7 +72,7 @@ router.delete("/carts/:cid", async (req, res) => {
       res.status(404).send("Elemento no encontrado");
     }
   } catch (error) {
-    res.status(500).send("Error al procesar la solicitud"); // Manejo de errores
+    res.status(500).send("Error al procesar la solicitud");
   }
 });
 
@@ -96,7 +95,6 @@ router.post("/:cid/producto/:pid", async (req, res) => {
         const productoIds = producto.id;
         let found = false;
 
-        // Buscar si el producto ya está en el carrito
         for (const item of carrito.products) {
           if (item.productoIds === productoIds) {
             item.quantity++;
@@ -106,7 +104,6 @@ router.post("/:cid/producto/:pid", async (req, res) => {
         }
 
         if (!found) {
-          // Si el producto no está en el carrito, añadirlo con cantidad 1
           carrito.products.push({ productoIds, quantity: 1 });
         }
 
@@ -123,8 +120,6 @@ router.post("/:cid/producto/:pid", async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
-
-  /* limpiar el carro */
 });
 
-module.exports = router;
+export default router;

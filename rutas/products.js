@@ -1,15 +1,19 @@
-const express = require("express");
+import express from "express";
+import { ProductManager } from "./claseproduct.js";
+
 const router = express.Router();
-const { ProductManager } = require("./claseproduct.js");
 const productos = new ProductManager();
 
 // Obtener todos los productos o limitar la cantidad
 router.get("/productos", async (req, res) => {
-  const limit = parseInt(req.query.limit);
   const allProducts = await productos.readProducts();
 
-  const prodctLimit = limit ? allProducts.slice(0, limit) : allProducts;
-  res.status(200).send(prodctLimit);
+  res.status(200).render("home", { title: "hola", allProducts });
+});
+
+/* SOCKET IO */
+router.get("/realtimeproducts", async (req, res) => {
+  res.status(200).render("realTimeProducts", { title: "realtime" });
 });
 
 // Obtener un producto por ID
@@ -101,4 +105,4 @@ router.delete("/productos/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

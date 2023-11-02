@@ -1,0 +1,14 @@
+<style>
+  article header { font-size: 1.5em; font-weight: bold; } article p { margin:
+  5px 0; } article p{ font-weight: bold; }
+</style>
+<article>
+  {{#each allProducts}}
+    <header>{{this.title}}</header>
+    <p>DESCRIPCION: {{this.description}}</p>
+    <p>PRICE: {{this.price}}</p>
+    <p>CODE: {{this.code}}</p>
+    <p>STOCK: {{this.stock}}</p>
+    <p>ID: {{this.id}}</p>
+  {{/each}}
+</article>

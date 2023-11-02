@@ -1,5 +1,5 @@
-const fs = require("fs").promises;
-const { v4: uuidv4 } = require("uuid");
+import { writeFile, readFile } from "fs/promises";
+import { v4 as uuidv4 } from "uuid";
 
 class ProductManager {
   constructor() {
@@ -9,11 +9,7 @@ class ProductManager {
 
   writeProducts = async (productos) => {
     try {
-      await fs.writeFile(
-        this.path,
-        JSON.stringify(productos, null, 2),
-        "utf-8"
-      );
+      await writeFile(this.path, JSON.stringify(productos, null, 2), "utf-8");
     } catch (error) {
       throw error;
     }
@@ -21,7 +17,7 @@ class ProductManager {
 
   readProducts = async () => {
     try {
-      const fileContents = await fs.readFile(this.path, "utf-8");
+      const fileContents = await readFile(this.path, "utf-8");
       return JSON.parse(fileContents);
     } catch (error) {
       throw error;
@@ -37,7 +33,7 @@ class ProductManager {
       code,
       stock
     };
-    sdsdsd;
+
     this.products.push({
       ...newProduct,
       id: uuidv4()
@@ -46,4 +42,5 @@ class ProductManager {
     await this.writeProducts(this.products);
   };
 }
-module.exports = { ProductManager };
+
+export { ProductManager };
