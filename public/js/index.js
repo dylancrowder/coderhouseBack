@@ -67,8 +67,6 @@ socket.on("product-list", (productsData) => {
       socket.emit("delete-product", product.id);
     });
 
-    productElement.appendChild(deleteButton);
-
     listProducts.appendChild(productElement);
     productElement.appendChild(title);
     productElement.appendChild(description);
@@ -76,7 +74,7 @@ socket.on("product-list", (productsData) => {
     productElement.appendChild(code);
     productElement.appendChild(stock);
     productElement.appendChild(id);
-
+    productElement.appendChild(deleteButton);
     listProducts.appendChild(productElement);
   });
 });
