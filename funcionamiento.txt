@@ -1,53 +1,55 @@
-Dependencias:
-
-    UUID
-    EXPRESS
 
 Funcionamiento:
-
 Productos:
 
     Obtener Productos
         Método: GET
-        Ruta: http://localhost:8080/api/productos
+        Ruta: http://localhost:8080/api/products
 
     Obtener Producto por ID
         Método: GET
-        Ruta: http://localhost:8080/api/productos/:id
+        Ruta: http://localhost:8080/api/products/:sid
 
     Crear un Producto
         Método: POST
-        Ruta: http://localhost:8080/api/productos
+        Ruta: http://localhost:8080/api/products
 
     Actualizar Producto
         Método: PUT
-        Ruta: http://localhost:8080/api/productos/:id
+        Ruta: http://localhost:8080/api/products/:sid
 
     Borrar Producto por ID
         Método: DELETE
-        Ruta: http://localhost:8080/api/productos/:id
-
+        Ruta: http://localhost:8080/api/products/:sid
+    
         WEBSOCKET
-http://localhost:8080/api/realtimeproducts
+        http://localhost:8080/apiCart/realtimeproducts
 
 
-Carritos:
+    Carritos:
 
     Crear Carrito
         Método: POST
-        Ruta: http://localhost:8080/api/carts
+        Ruta: http://localhost:8080/apiCart/carts
 
     Obtener Carrito por ID
         Método: GET
-        Ruta: http://localhost:8080/api/carts/:cdi
+        Ruta: http://localhost:8080/apiCart/carts/:pdi
 
     Eliminar Carrito
         Método: DELETE
-        Ruta: http://localhost:8080/api/carts/:cid
+        Ruta: http://localhost:8080/apiCart/carts/:pid
 
     Agregar Producto al Carrito
         Método: POST
-        Ruta: http://localhost:8080/api/:cdi/producto/:pid
+        Ruta: http://localhost:8080/apiCart/:cdi/carts/:pid
+
+
+
+
+
+
+
 
 
 
