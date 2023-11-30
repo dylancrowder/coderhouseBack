@@ -1,23 +1,26 @@
-<h1>estudiantes</h1>
+<h1>Productos</h1>
 <article>
   <table>
     <tr>
       <th>title</th>
-      <th>description</th>
-      <th>thumbnail</th>
-      <th>code</th>
-      <th>stock</th>
+      <th>size</th>
+      <th>price</th>
+      <th>quantity</th>
+
     </tr>
-    {{#each products}}
+    {{#each payload}}
       <tr>
         <td>{{this.title}}</td>
-        <td>{{this.description}}</td>
-        <td>{{this.thumbnail}}</td>
-        <td>{{this.code}}</td>
-        <td>{{this.stock}}</td>
+        <td>{{this.size}}</td>
+        <td>{{this.price}}</td>
+        <td>{{this.quantity}}</td>
 
       </tr>
 
     {{/each}}
+
   </table>
+  <p>Pagina actual {{page}}</p>
+  <a href="{{prevLink}}" role="button">Anterior</a>
+  <a href="{{nextLink}}" role="button">sigiente</a>
 </article>

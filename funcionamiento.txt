@@ -1,58 +1,60 @@
+Aquí tienes el texto organizado de manera más legible:
 
-Funcionamiento:
-Productos:
+**Funcionamiento:**
 
-    Obtener Productos
-        Método: GET
-        Ruta: http://localhost:8080/api/products
+**Productos:**
 
-    Obtener Producto por ID
-        Método: GET
-        Ruta: http://localhost:8080/api/products/:sid
+- Obtener Productos
+  - Método: GET
+  - Ruta: http://localhost:8080/api/products
 
-    Crear un Producto
-        Método: POST
-        Ruta: http://localhost:8080/api/products
+- Obtener Producto por ID
+  - Método: GET
+  - Ruta: http://localhost:8080/api/products/:sid
 
-    Actualizar Producto
-        Método: PUT
-        Ruta: http://localhost:8080/api/products/:sid
+- Crear un Producto
+  - Método: POST
+  - Ruta: http://localhost:8080/api/products
 
-    Borrar Producto por ID
-        Método: DELETE
-        Ruta: http://localhost:8080/api/products/:sid
-    
-        WEBSOCKET
-        http://localhost:8080/apiCart/realtimeproducts
+- Actualizar Producto
+  - Método: PUT
+  - Ruta: http://localhost:8080/api/products/:sid
 
+- Borrar Producto por ID
+  - Método: DELETE
+  - Ruta: http://localhost:8080/api/products/:sid
 
-    Carritos:
+**WEBSOCKET:**
+- http://localhost:8080/apiCart/realtimeproducts
 
-    Crear Carrito
-        Método: POST
-        Ruta: http://localhost:8080/apiCart/carts
+**Carritos:**
 
-    Obtener Carrito por ID
-        Método: GET
-        Ruta: http://localhost:8080/apiCart/carts/:pdi
+- Crear Carrito
+  - Método: POST
+  - Ruta: http://localhost:8080/apiCart/carts
 
-    Eliminar Carrito
-        Método: DELETE
-        Ruta: http://localhost:8080/apiCart/carts/:pid
+- Obtener Carrito por ID
+  - Método: GET
+  - Ruta: http://localhost:8080/apiCart/carts/:pdi
 
-    Agregar Producto al Carrito
-        Método: POST
-        Ruta: http://localhost:8080/apiCart/:cdi/carts/:pid
+- Eliminar Carrito
+  - Método: DELETE
+  - Ruta: http://localhost:8080/apiCart/carts/:pid
 
+- Agregar Producto al Carrito
+  - Método: POST
+  - Ruta: http://localhost:8080/apiCart/:cdi/carts/:pid
 
+**Vistas:**
 
+- Inicio
+  - Método: GET
+  - Ruta: http://localhost:8080/
 
+- Mostrar Productos
+  - Método: GET
+  - Ruta: http://localhost:8080/products
 
-
-
-
-
-
-
-
-
+- Chat
+  - Método: GET
+  - Ruta: http://localhost:8080/chat

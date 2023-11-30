@@ -1,17 +1,22 @@
 import cartsModel from "./models/carts.models.js";
 import productModel from "./models/products.model.js";
+import cartProductsModel from "./models/cartProducts.model.js";
 
 export default class CartsModel {
-  static get() {
+  static async get() {
     return cartsModel.find();
   }
 
   static async getById(sid) {
-    const cart = await cartsModel.findById(sid);
-    if (!cart) {
-      throw new Error("carrito no encontrado");
+    try {
+      const cart = await cartsModel.findById(sid).populate("products.product");
+      if (!cart) {
+        throw new Error("Carrito no encontrado");
+      }
+      return cart;
+    } catch (error) {
+      throw new Error("Error al obtener el carrito: " + error.message);
     }
-    return cart;
   }
 
   static async create(data) {
@@ -32,30 +37,76 @@ export default class CartsModel {
 
   static async addProductToCart(cartId, productId) {
     try {
-      // Buscar el carrito por su ID
       const cart = await cartsModel.findById(cartId);
 
       if (!cart) {
         throw new Error("Carrito no encontrado");
       }
-      // Supongamos que tienes un modelo de productos llamado productsModel
-      // y que cada producto tiene su propio ID
-      const product = await productModel.findById(productId);
 
+      const product = await productModel.find({ _id: productId });
       if (!product) {
         throw new Error("Producto no encontrado");
       }
 
-      // Agregar el producto al carrito
-      cart.products.push(product);
-
-      // Guardar el carrito actualizado en la base de datos
+      cart.products.push({ product: productId });
       await cart.save();
+
+      console.log("Producto agregado al carrito correctamente", cart.products);
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    }
+  }
+
+  static async deleteProductCart(cartId, productId) {
+    try {
+      const cart = await cartsModel.findById(cartId);
+      console.log(cart);
+      if (!cart) {
+        throw new Error("Carrito no encontrado");
+      }
+
+      const productIndex = cart.products.findIndex(
+        (p) => p.product.toString() === productId
+      );
+      console.log(productIndex);
+
+      if (productIndex === -1) {
+        throw new Error("Producto no encontrado en el carrito");
+      }
+
+      cart.products.splice(productIndex, 1);
+
+      await cart.save();
+
+      console.log("Producto eliminado del carrito correctamente");
+    } catch (error) {
+      console.error(error.message);
+      throw error;
+    }
+  }
+
+  static async addProductQuantity(cartId, productId, data) {
+    try {
+      // Buscar el carrito por su ID
+      const cart = await cartsModel
+        .findById(cartId)
+        .populate("products.product");
+
+      console.log("ESTE ES EL CARRITO ", cart);
+      if (!cart) {
+        throw new Error("Carrito no encontrado");
+      }
+
+      /* como puedo leer el quantity de products */
+      const primerProducto = cart.products[0];
+
+      console.log("este es el producto", primerProducto);
 
       console.log("Producto agregado al carrito correctamente");
     } catch (error) {
       console.error(error.message);
-      throw error; // Puedes manejar el error de acuerdo a tus necesidades
+      throw error;
     }
   }
 }

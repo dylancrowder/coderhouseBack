@@ -12,9 +12,19 @@ router.get("/chat", async (req, res) => {
 });
 
 router.get("/products", async (req, res) => {
-  const products = await ProductManager2.get();
+  const sort = "desc";
+  const search = 29.99;
+  const { limit = 5, page = 1 } = req.query;
+
+  const products = await ProductManager2.get(limit, page, sort, search);
+  const result = ProductManager2.responsePaginate({
+    ...products,
+    sort,
+    search
+  });
+
   res.render("products", {
-    products: products.map((student) => student.toJSON()),
+    ...result,
     title: "lista de productos "
   });
 });
