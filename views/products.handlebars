@@ -2,25 +2,32 @@
 <article>
   <table>
     <tr>
+
       <th>title</th>
       <th>size</th>
       <th>price</th>
-      <th>quantity</th>
+      <th>accion</th>
 
     </tr>
     {{#each payload}}
       <tr>
+
         <td>{{this.title}}</td>
         <td>{{this.size}}</td>
         <td>{{this.price}}</td>
-        <td>{{this.quantity}}</td>
+        <td>
+         <button onclick="buyProduct('{{this._id}}')" data-product-id="{{this._id}}">Comprar</button>
+
+        </td>
 
       </tr>
-
     {{/each}}
 
   </table>
   <p>Pagina actual {{page}}</p>
   <a href="{{prevLink}}" role="button">Anterior</a>
-  <a href="{{nextLink}}" role="button">sigiente</a>
+  <a href="{{nextLink}}" role="button">siguiente</a>
 </article>
+
+<script type="module" src="/js/products.js"></script>
+

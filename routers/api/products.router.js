@@ -4,7 +4,6 @@ import ProductManager2 from "../../dao/Products.manager.js";
 const router = Router();
 
 router.get("/products", async (req, res) => {
-
   const { limit = 10, page = 1, sort, search } = req.query;
   const product = await ProductManager2.get(limit, page, sort, search);
   res

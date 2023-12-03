@@ -6,11 +6,9 @@ const productCartSchema = new mongoose.Schema(
       description: { type: String, required: true },
       thumbnail: { type: String },
       size: { type: String, enum: ["S", "M", "L", "XL"] },
-      quantity: { type: Number, required: true },
       price: { type: Number, require: true },
       code: { type: String, required: true },
-      stock: { type: Number, required: true },
-      total: { type: Number }
+      stock: { type: Number, required: true }
     }
   },
   { _id: false }

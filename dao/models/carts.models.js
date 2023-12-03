@@ -5,6 +5,10 @@ const cartProducts = new mongoose.Schema(
     product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "product"
+    },
+    quantity: {
+      type: Number,
+      default: 1
     }
   },
   { _id: false }

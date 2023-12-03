@@ -7,10 +7,8 @@ const ProductsSchema = new mongoose.Schema(
     thumbnail: { type: String },
     size: { type: String, enum: ["S", "M", "L", "XL"], default: "M" },
     price: { type: Number, require: true },
-    quantity: { type: Number, required: true },
     code: { type: String, required: true },
-    stock: { type: Number, required: true },
-    total: { type: Number }
+    stock: { type: Number, required: true }
   },
   { timestamps: true }
 );

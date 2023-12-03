@@ -40,18 +40,32 @@ export default class CartsModel {
       const cart = await cartsModel.findById(cartId);
 
       if (!cart) {
-        throw new Error("Carrito no encontrado");
+        const newCart = await this.cartsModel.create(data);
+        newCart.products.push({ product: productId, quantity: 1 });
+        await newCart.save();
+
+        console.log(
+          "Producto agregado al carrito correctamente",
+          newCart.products
+        );
+      } else {
+        const existingProductIndex = cart.products.findIndex(
+          (item) => item.product.toString() === productId.toString()
+        );
+
+        if (existingProductIndex !== -1) {
+          cart.products[existingProductIndex].quantity += 1;
+        } else {
+          cart.products.push({ product: productId, quantity: 1 });
+        }
+
+        await cart.save();
+
+        console.log(
+          "Producto agregado al carrito correctamente",
+          cart.products
+        );
       }
-
-      const product = await productModel.find({ _id: productId });
-      if (!product) {
-        throw new Error("Producto no encontrado");
-      }
-
-      cart.products.push({ product: productId });
-      await cart.save();
-
-      console.log("Producto agregado al carrito correctamente", cart.products);
     } catch (error) {
       console.error(error.message);
       throw error;
@@ -86,27 +100,81 @@ export default class CartsModel {
     }
   }
 
-  static async addProductQuantity(cartId, productId, data) {
+  static async addProductQuantity(cartId, productId) {
     try {
-      // Buscar el carrito por su ID
-      const cart = await cartsModel
-        .findById(cartId)
-        .populate("products.product");
+      // Buscar el carrito por su ID y el producto específico
+      const updatedCart = await this.updateCartQuantity(cartId, productId);
 
-      console.log("ESTE ES EL CARRITO ", cart);
+      // Calcular el total del carrito
+      const total = this.calculateCartTotal(updatedCart);
+
+      console.log("Total del carrito:", total);
+
+      if (!updatedCart) {
+        console.log("Carrito creado o actualizado con éxito:", updatedCart);
+      } else {
+        console.log("Producto agregado al carrito correctamente:", updatedCart);
+      }
+
+      return { cart: updatedCart, total };
+    } catch (error) {
+      console.error("Error al agregar producto al carrito:", error.message);
+      throw error;
+    }
+  }
+
+  static async updateCartQuantity(cartId, productId) {
+    const updatedCart = await cartsModel.findOneAndUpdate(
+      { _id: cartId, "products.product": productId },
+      { $inc: { "products.$.quantity": 1 } },
+      { new: true }
+    );
+
+    if (!updatedCart) {
+      return await this.createNewCart(cartId, productId);
+    }
+
+    return updatedCart;
+  }
+
+  static async createNewCart(cartId, productId) {
+    const newCart = await cartsModel.findByIdAndUpdate(
+      cartId,
+      {
+        $push: {
+          products: { product: productId, quantity: 1 }
+        }
+      },
+      { new: true, upsert: true }
+    );
+
+    return newCart;
+  }
+
+  static calculateCartTotal(cart) {
+    if (!cart) return 0;
+
+    return cart.products.reduce((acc, product) => {
+      return acc + product.quantity * product.product.price;
+    }, 0);
+  }
+
+  static async deleteAll(sid) {
+    try {
+      const cart = await cartsModel.findById(sid).populate("products.product");
       if (!cart) {
         throw new Error("Carrito no encontrado");
       }
 
-      /* como puedo leer el quantity de products */
-      const primerProducto = cart.products[0];
+      // Obtén la ID del carrito
+      const cartId = cart._id;
 
-      console.log("este es el producto", primerProducto);
+      // Elimina todos los productos asociados al carrito por su ID
+      await cartsModel.updateOne({ _id: cartId }, { $set: { products: [] } });
 
-      console.log("Producto agregado al carrito correctamente");
+      return cart;
     } catch (error) {
-      console.error(error.message);
-      throw error;
+      throw new Error("Error al obtener el carrito: " + error.message);
     }
   }
 }

@@ -38,7 +38,10 @@ export default class ProductManager2 {
     console.log("eliminado correctamente ");
   }
 
-  static responsePaginate = (data) => {
+ 
+}
+
+export const responsePaginate = (data) => {
     return {
       status: "success",
       payload: data.docs.map((doc) => doc.toJSON()),
@@ -56,4 +59,3 @@ export default class ProductManager2 {
         : null
     };
   };
-}

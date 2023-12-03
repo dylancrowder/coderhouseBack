@@ -78,19 +78,20 @@ router.put("/carts/:cid", async (req, res) => {
 router.put("/carts/:cart/products/:product", async (req, res) => {
   try {
     const { cart, product } = req.params;
-    const { quantity } = req.body;
 
-    const updatedCart = await cartManager.addProductQuantity(
-      cart,
-      product,
-      quantity
-    );
+    const updatedCart = await cartManager.addProductQuantity(cart, product);
 
     res.status(200).json(updatedCart);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: "Error al actualizar el carrito" });
   }
+});
+
+router.delete("/carts/:cid", async (req, res) => {
+  const { cid } = req.params;
+  const deleteAllCart = await cartManager.deleteAll(cid);
+  res.status(200).json(deleteAllCart);
 });
 
 export default router;
