@@ -14,6 +14,10 @@ router.get("/profile", async (req, res) => {
   }
 
   const name = req.session.user.first_name;
+  const role = req.session.user.role;
+
+  const admin = "isAdmin";
+
   const sort = "desc";
   const search = 29.99;
   const { limit = 5, page = 1 } = req.query;
@@ -25,11 +29,20 @@ router.get("/profile", async (req, res) => {
     search
   });
 
-  res.render("products", {
-    ...result,
-    name,
-    title: "Lista de productos"
-  });
+  if (role !== "admin") {
+    res.render("products", {
+      ...result,
+      name,
+      title: "Lista de productos"
+    });
+  } else {
+    res.render("products", {
+      ...result,
+      admin,
+      name,
+      title: "Lista de productos"
+    });
+  }
 });
 
 router.get("/login", (req, res) => {
