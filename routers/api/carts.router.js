@@ -78,8 +78,12 @@ router.put("/carts/:cid", async (req, res) => {
 router.put("/carts/:cart/products/:product", async (req, res) => {
   try {
     const { cart, product } = req.params;
-
-    const updatedCart = await cartManager.addProductQuantity(cart, product);
+    const { quantity } = req.body;
+    const updatedCart = await cartManager.addProductQuantity(
+      cart,
+      product,
+      quantity
+    );
 
     res.status(200).json(updatedCart);
   } catch (error) {

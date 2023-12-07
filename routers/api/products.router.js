@@ -1,15 +1,13 @@
 import { Router } from "express";
 import ProductManager2 from "../../dao/Products.manager.js";
-
+import { responsePaginate } from "../../dao/Products.manager.js";
 const router = Router();
 
 /* obtener todos los products */
 router.get("/products", async (req, res) => {
   const { limit = 10, page = 1, sort, search } = req.query;
   const product = await ProductManager2.get(limit, page, sort, search);
-  res
-    .status(200)
-    .json(ProductManager2.responsePaginate({ ...product, sort, search }));
+  res.status(200).json(responsePaginate({ ...product, sort, search }));
 });
 
 /* obtener producto por id */

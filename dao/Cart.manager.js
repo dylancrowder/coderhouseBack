@@ -100,10 +100,10 @@ export default class CartsModel {
     }
   }
 
-  static async addProductQuantity(cartId, productId) {
+  static async addProductQuantity(cartId, productId, body) {
     try {
       // Buscar el carrito por su ID y el producto específico
-      const updatedCart = await this.updateCartQuantity(cartId, productId);
+      const updatedCart = await this.updateCartQuantity(cartId, productId, body);
 
       // Calcular el total del carrito
       const total = this.calculateCartTotal(updatedCart);
@@ -123,26 +123,27 @@ export default class CartsModel {
     }
   }
 
-  static async updateCartQuantity(cartId, productId) {
+  static async updateCartQuantity(cartId, productId, body) {
+  
     const updatedCart = await cartsModel.findOneAndUpdate(
       { _id: cartId, "products.product": productId },
-      { $inc: { "products.$.quantity": 1 } },
+      { $inc: { "products.$.quantity": body } },
       { new: true }
     );
 
     if (!updatedCart) {
-      return await this.createNewCart(cartId, productId);
+      return await this.createNewCart(cartId, productId, cantidad);
     }
 
     return updatedCart;
   }
 
-  static async createNewCart(cartId, productId) {
+  static async createNewCart(cartId, productId,body) {
     const newCart = await cartsModel.findByIdAndUpdate(
       cartId,
       {
         $push: {
-          products: { product: productId, quantity: 1 }
+          products: { product: productId, quantity: body }
         }
       },
       { new: true, upsert: true }

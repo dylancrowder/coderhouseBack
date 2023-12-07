@@ -16,7 +16,7 @@ export default class ProductManager2 {
   static async getById(sid) {
     const product = await productModel.findById(sid);
     if (!product) {
-      throw new error("producto no econtrado");
+      throw new Error("producto no econtrado");
     }
     return product;
   }
@@ -37,25 +37,23 @@ export default class ProductManager2 {
     console.log("usuario creado");
     console.log("eliminado correctamente ");
   }
-
- 
 }
 
 export const responsePaginate = (data) => {
-    return {
-      status: "success",
-      payload: data.docs.map((doc) => doc.toJSON()),
-      totalPages: data.totalPages,
-      prevPage: data.prevPage,
-      nextPage: data.nextPage,
-      page: data.page,
-      hasPrevPage: data.hasPrevPage,
-      hasNextPage: data.hasNextPage,
-      prevLink: data.hasPrevPage
-        ? `http://localhost:8080/profile?sort=${data.sort}&search=${data.search}&page=${data.prevPage}&limit=${data.limit}`
-        : null,
-      nextLink: data.hasNextPage
-        ? `http://localhost:8080/profile?sort=${data.sort}&search=${data.search}&page=${data.nextPage}&limit=${data.limit}`
-        : null
-    };
+  return {
+    status: "success",
+    payload: data.docs.map((doc) => doc.toJSON()),
+    totalPages: data.totalPages,
+    prevPage: data.prevPage,
+    nextPage: data.nextPage,
+    page: data.page,
+    hasPrevPage: data.hasPrevPage,
+    hasNextPage: data.hasNextPage,
+    prevLink: data.hasPrevPage
+      ? `http://localhost:8080/profile?sort=${data.sort}&search=${data.search}&page=${data.prevPage}&limit=${data.limit}`
+      : null,
+    nextLink: data.hasNextPage
+      ? `http://localhost:8080/profile?sort=${data.sort}&search=${data.search}&page=${data.nextPage}&limit=${data.limit}`
+      : null
   };
+};
