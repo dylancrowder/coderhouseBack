@@ -4,15 +4,16 @@ import { responsePaginate } from "../../dao/Products.manager.js";
 import cartManager from "../../dao/Cart.manager.js";
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.render("index", { title: "productos" });
-});
-
 router.get("/chat", async (req, res) => {
   res.status(200).render("chat", { title: "chat" });
 });
 
-router.get("/products", async (req, res) => {
+router.get("/profile", async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/login");
+  }
+
+  const name = req.session.user.first_name;
   const sort = "desc";
   const search = 29.99;
   const { limit = 5, page = 1 } = req.query;
@@ -20,16 +21,34 @@ router.get("/products", async (req, res) => {
   const products = await ProductManager2.get(limit, page, sort, search);
   const result = responsePaginate({
     ...products,
-
     sort,
     search
   });
 
   res.render("products", {
     ...result,
-    title: "lista de productos "
+    name,
+    title: "Lista de productos"
   });
-  console.log(result);
+});
+
+router.get("/login", (req, res) => {
+  res.render("login", { title: "hola" });
+});
+
+router.get("/register", (req, res) => {
+  res.render("register", { title: "hola" });
+});
+
+router.get("/logout", (req, res) => {
+  req.session.destroy((error) => {
+    if (error) {
+      console.error("Session destroy error:", error);
+      res.status(500).json({ message: "ocurrió un error" });
+    } else {
+      res.render("login", { title: "ingresa" });
+    }
+  });
 });
 
 router.get("/cartsview/:cid", async (req, res) => {
@@ -38,15 +57,12 @@ router.get("/cartsview/:cid", async (req, res) => {
     const cart = await cartManager.getById(cid);
     console.log(cart);
 
-    // Check if cart is valid
     if (!cart) {
-      // Handle the case where cart is not found
       return res
         .status(404)
         .render("error", { message: "Carrito no encontrado" });
     }
 
-    // Log each product for inspection
     cart.products.forEach((item, index) => {
       console.log(`Product ${index + 1}:`, item.product);
     });

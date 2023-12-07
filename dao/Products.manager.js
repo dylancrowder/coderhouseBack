@@ -52,10 +52,10 @@ export const responsePaginate = (data) => {
       hasPrevPage: data.hasPrevPage,
       hasNextPage: data.hasNextPage,
       prevLink: data.hasPrevPage
-        ? `http://localhost:8080/products?sort=${data.sort}&search=${data.search}&page=${data.prevPage}&limit=${data.limit}`
+        ? `http://localhost:8080/profile?sort=${data.sort}&search=${data.search}&page=${data.prevPage}&limit=${data.limit}`
         : null,
       nextLink: data.hasNextPage
-        ? `http://localhost:8080/products?sort=${data.sort}&search=${data.search}&page=${data.nextPage}&limit=${data.limit}`
+        ? `http://localhost:8080/profile?sort=${data.sort}&search=${data.search}&page=${data.nextPage}&limit=${data.limit}`
         : null
     };
   };
