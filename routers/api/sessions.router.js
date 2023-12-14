@@ -1,66 +1,22 @@
 import { Router } from "express";
-import userloginModel from "../../dao/models/userRegister.model.js";
+import passport from "passport";
 const router = Router();
 
-router.post("/sessions/login", async (req, res) => {
-  const {
-    body: { email, password }
-  } = req;
-
-  if (!email || !password) {
-    return res.render("error", {
-      title: "Error",
-      messageError: "Both email and password are required."
-    });
+router.post(
+  "/sessions/login",
+  passport.authenticate("login", { failureRedirect: "/login" }),
+  async (req, res) => {
+    res.redirect("/profile");
   }
+);
 
-  const user = await userloginModel.findOne({ email });
-
-  if (!user) {
-    return res.render("error", { title: "Error" });
+router.post(
+  "/sessions/register",
+  passport.authenticate("register", { failureRedirect: "/register" }),
+  async (req, res) => {
+    res.redirect("/login");
   }
-
-  // Compare the provided password with the stored password directly
-  if (password !== user.password) {
-    return res.render("error", {
-      title: "Error",
-      messageError: "Invalid password."
-    });
-  }
-
-  const { first_name, last_name, age, role } = user;
-
-  req.session.user = {
-    first_name,
-    last_name,
-    email,
-    role,
-    age
-  };
-  res.redirect("/profile");
-});
-
-router.post("/sessions/register", async (req, res) => {
-  const {
-    body: { first_name, last_name, email, password, age }
-  } = req;
-
-  if (!first_name || !last_name || !email || !password) {
-    return res.render("error", {
-      title: "error",
-      messageError: "todos los campos son"
-    });
-  }
-
-  const user = await userloginModel.create({
-    first_name,
-    last_name,
-    email,
-    password,
-    age
-  });
-  res.redirect("/login");
-});
+);
 
 router.get("/sessions/me", (req, res) => {
   if (!req.session.user) {

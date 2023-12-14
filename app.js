@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 const app = express();
 app.use(express.json());
+
 import { __dirname } from "./utils.js";
 import handlebars from "express-handlebars";
 import http from "http";
@@ -16,6 +17,8 @@ import userLogin from "./routers/api/sessions.router.js";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import { URI } from "./db/mongodb.js";
+import passport from "passport";
+import { init as initPassport } from "./config/passportConfig.js";
 const SECRET = ",9O1z?Vq2yV0";
 
 app.use(
@@ -37,6 +40,10 @@ app.set("view engine", "handlebars");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use("/", productViewRouter);
 app.use("/api", productRouterApi, cartRouterApi, cookies, userLogin);
 
@@ -48,3 +55,7 @@ initChat(server);
 server.listen(PORT, () => {
   console.log("CORRIENDO EL SERVIRDO");
 });
+
+/* d1477ca982fda2160c035d9336404562f12cf130 */
+
+/* Iv1.3f0c1af48df6b1d2 */

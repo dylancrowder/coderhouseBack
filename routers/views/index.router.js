@@ -9,12 +9,11 @@ router.get("/chat", async (req, res) => {
 });
 
 router.get("/profile", async (req, res) => {
-  if (!req.session.user) {
+  if (!req.user) {
     return res.redirect("/login");
   }
-
-  const name = req.session.user.first_name;
-  const role = req.session.user.role;
+  const name = req.user.first_name;
+  const role = req.user.role;
 
   const admin = "isAdmin";
 
@@ -85,6 +84,7 @@ router.get("/cartsview/:cid", async (req, res) => {
     console.error(error.message);
     res.status(500).render("error", { message: "Error al obtener el carrito" });
   }
+  
 });
 
 export default router;
