@@ -18,6 +18,20 @@ router.post(
   }
 );
 
+router.get(
+  "/sessions/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get(
+  "/sessions/github/callback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  (req, res) => {
+    console.log(req.user);
+    res.redirect("/profile");
+  }
+);
+
 router.get("/sessions/me", (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ message: "no estas autorizado" });

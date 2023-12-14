@@ -56,6 +56,4 @@ server.listen(PORT, () => {
   console.log("CORRIENDO EL SERVIRDO");
 });
 
-/* d1477ca982fda2160c035d9336404562f12cf130 */
 
-/* Iv1.3f0c1af48df6b1d2 */

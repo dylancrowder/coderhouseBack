@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { Strategy as GithubStrategi } from "passport-github2";
+import { Strategy as GithubStrategy } from "passport-github2";
 import UserModel from "../dao/models/userRegister.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 
@@ -64,10 +64,35 @@ export const init = () => {
     const user = await UserModel.findById(uid);
     done(null, user);
   });
-/*   const githuboptions = {
+  const githubOptions = {
     clientID: "Iv1.3f0c1af48df6b1d2",
-    clientSecret: "d1477ca982fda2160c035d9336404562f12cf130 ",
-    callbackURL:"http://http://localhost:8080/api/sessions/github/callback"
+    clientSecret: "328c5cef22810a6ba1dbb883442b01fb6222354d",
+    callbackURL: "http://localhost:8080/api/sessions/github/callback"
   };
-  passport.use("github", new GithubStrategi({}), () => {}); */
+
+  passport.use(
+    "github",
+    new GithubStrategy(
+      githubOptions,
+      async (accessToken, refreshToken, profile, done) => {
+        console.log("GitHub Profile:", profile);
+        const email = profile._json.email;
+
+        let user = await UserModel.findOne({ email });
+        if (user) {
+          return done(null, user);
+        }
+        user = {
+          first_name: profile._json.name,
+          last_name: "",
+          email,
+          password: "",
+          provider: "github",
+          providerId: profile.id
+        };
+        const newUser = await UserModel.create(user);
+        done(null, newUser);
+      }
+    )
+  );
 };
