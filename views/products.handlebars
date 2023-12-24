@@ -1,5 +1,13 @@
 <main>
 
+  <style>
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; } th,
+    td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+    button { background-color: #4CAF50; color: white; border: none; padding: 5px
+    10px; text-align: center; text-decoration: none; display: inline-block;
+    font-size: 14px; margin: 2px 2px; cursor: pointer; }
+  </style>
+
   {{#if admin}}
     <button>Boton Admin</button>
   {{/if}}
@@ -11,7 +19,17 @@
       <tr>
         <th>title</th>
         <th>size</th>
-        <th>price</th>
+
+        <th>
+          Price
+          <form action="/profile" method="get">
+            <label for="sort">Ordenar por:</label>
+            <select name="sort" id="sort" onchange="this.form.submit()">
+              <option value="asc">Mayor precio</option>
+              <option value="desc">Menor precio</option>
+            </select>
+          </form>
+        </th>
         <th>accion</th>
       </tr>
       {{#each payload}}
@@ -19,6 +37,7 @@
           <td>{{this.title}}</td>
           <td>{{this.size}}</td>
           <td>{{this.price}}</td>
+
           <td>
             <button
               onclick="buyProduct('{{this._id}}')"
@@ -35,6 +54,7 @@
   <header>
     <a href="/logout" role="button">salir</a>
   </header>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

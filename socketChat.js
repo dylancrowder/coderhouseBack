@@ -8,7 +8,6 @@ export const initChat = (httpServer) => {
 
   io.on("connection", async (socketClient) => {
     try {
-      // Al conectar, obtén todos los mensajes y emite al cliente
       const messages = await MessageModel.find();
 
       socketClient.emit("conversation", messages);

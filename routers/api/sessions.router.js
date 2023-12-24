@@ -32,11 +32,10 @@ router.get(
   }
 );
 
-router.get("/sessions/me", (req, res) => {
+router.get("/sessions/current", (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ message: "no estas autorizado" });
   }
-
   res.status(200).json(req.session.user);
 });
 export default router;

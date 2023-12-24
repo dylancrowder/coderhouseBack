@@ -30,7 +30,11 @@ router.get("/carts/:pid", async (req, res) => {
 router.post("/carts", async (req, res) => {
   try {
     const { body } = req;
-    let cart = await cartManager.create(body);
+    const userId = req.user._id; // Obtener el ID del usuario autenticado
+
+    // Utilizar el servicio para crear el carrito y asignarlo al usuario
+    let cart = await cartManager.create(userId, body);
+
     res.status(200).json(cart);
   } catch (error) {
     console.error(error.message);

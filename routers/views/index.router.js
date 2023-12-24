@@ -2,6 +2,7 @@ import { Router } from "express";
 import ProductManager2 from "../../dao/Products.manager.js";
 import { responsePaginate } from "../../dao/Products.manager.js";
 import cartManager from "../../dao/Cart.manager.js";
+import userRegisterModel from "../../dao/models/userRegister.model.js";
 const router = Router();
 
 router.get("/chat", async (req, res) => {
@@ -9,38 +10,56 @@ router.get("/chat", async (req, res) => {
 });
 
 router.get("/profile", async (req, res) => {
-  if (!req.user) {
-    return res.redirect("/login");
-  }
-  const name = req.user.first_name;
-  const role = req.user.role;
+  try {
+    if (!req.user) {
+      return res.redirect("/login");
+    }
 
-  const admin = "isAdmin";
+    const name = req.user.first_name;
+    const role = req.user.role;
+    const admin = "isAdmin";
 
-  const sort = "desc";
-  const search = 29.99;
-  const { limit = 5, page = 1 } = req.query;
+    // Assuming that "Cart" is another Mongoose model
+    const userWithCart = await userRegisterModel
+      .findById(req.user._id)
+      .populate("cart");
 
-  const products = await ProductManager2.get(limit, page, sort, search);
-  const result = responsePaginate({
-    ...products,
-    sort,
-    search
-  });
+    const userCart = userWithCart.cart
 
-  if (role !== "admin") {
-    res.render("products", {
-      ...result,
-      name,
-      title: "Lista de productos"
+    console.log("ESTE ES EL CARRITO ID", userCart);
+
+    const sort = "desc";
+    const search = 29.99;
+
+    const { limit = 5, page = 1 } = req.query;
+
+    // Assuming you have a ProductManager2 and responsePaginate functions defined
+    const products = await ProductManager2.get(limit, page, sort, search);
+    const result = responsePaginate({
+      ...products,
+      cart: userCart ? userCart.products : [], // Make sure userCart is defined
+      sort,
+      search
     });
-  } else {
-    res.render("products", {
-      ...result,
-      admin,
-      name,
-      title: "Lista de productos"
-    });
+
+    if (role !== "admin") {
+      res.render("products", {
+        ...result,
+        name,
+        cart: userCart,
+        title: "Lista de productos"
+      });
+    } else {
+      res.render("products", {
+        ...result,
+        admin,
+        name,
+        title: "Lista de productos"
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -84,7 +103,6 @@ router.get("/cartsview/:cid", async (req, res) => {
     console.error(error.message);
     res.status(500).render("error", { message: "Error al obtener el carrito" });
   }
-  
 });
 
 export default router;

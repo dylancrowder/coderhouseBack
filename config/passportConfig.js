@@ -31,6 +31,7 @@ export const init = () => {
         first_name,
         last_name,
         email,
+        cart,
         password: createHash(password),
         age
       });

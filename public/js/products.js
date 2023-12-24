@@ -11,6 +11,11 @@
     });
   });
 
+  
+
+
+
+
   async function buyProduct(productId) {
     try {
       console.log("Product ID to be purchased:", productId);

@@ -1,9 +1,9 @@
 import cartsModel from "./models/carts.models.js";
 import productModel from "./models/products.model.js";
 import cartProductsModel from "./models/cartProducts.model.js";
-
+import userRegisterModel from "./models/userRegister.model.js";
 export default class CartsModel {
-  static async get() {
+  static get() {
     return cartsModel.find();
   }
 
@@ -19,10 +19,26 @@ export default class CartsModel {
     }
   }
 
-  static async create(data) {
-    const cart = await cartsModel.create(data);
-    console.log("carrito creado");
-    return cart;
+  static async create(userId, data) {
+    try {
+      // Crea el carrito
+      const cart = await cartsModel.create(data);
+      console.log("Carrito creado");
+
+      // Asigna el carrito al usuario
+      await userRegisterModel.findByIdAndUpdate(
+        userId,
+        { cart: cart._id },
+        { new: true }
+      );
+
+      console.log("Carrito asignado al usuario");
+
+      return cart;
+    } catch (error) {
+      console.error("Error al crear el carrito", error);
+      throw error;
+    }
   }
 
   static async updateById(sid, data) {
@@ -103,7 +119,11 @@ export default class CartsModel {
   static async addProductQuantity(cartId, productId, body) {
     try {
       // Buscar el carrito por su ID y el producto específico
-      const updatedCart = await this.updateCartQuantity(cartId, productId, body);
+      const updatedCart = await this.updateCartQuantity(
+        cartId,
+        productId,
+        body
+      );
 
       // Calcular el total del carrito
       const total = this.calculateCartTotal(updatedCart);
@@ -124,7 +144,6 @@ export default class CartsModel {
   }
 
   static async updateCartQuantity(cartId, productId, body) {
-  
     const updatedCart = await cartsModel.findOneAndUpdate(
       { _id: cartId, "products.product": productId },
       { $inc: { "products.$.quantity": body } },
@@ -138,7 +157,7 @@ export default class CartsModel {
     return updatedCart;
   }
 
-  static async createNewCart(cartId, productId,body) {
+  static async createNewCart(cartId, productId, body) {
     const newCart = await cartsModel.findByIdAndUpdate(
       cartId,
       {
