@@ -5,6 +5,12 @@ import cartManager from "../../dao/Cart.manager.js";
 import userRegisterModel from "../../dao/models/userRegister.model.js";
 const router = Router();
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/login"); // Redirecciona a la página de inicio de sesión si no está autenticado
+}
 router.get("/chat", async (req, res) => {
   res.status(200).render("chat", { title: "chat" });
 });
@@ -19,16 +25,13 @@ router.get("/profile", async (req, res) => {
     const role = req.user.role;
     const admin = "isAdmin";
     const user = req.user._id;
-    console.log("este es el user", user);
+
     // Assuming that "Cart" is another Mongoose model
     const userWithCart = await userRegisterModel
       .findById(req.user._id)
       .populate("cart");
 
-    const sort = "desc";
-    const search = 29.99;
-
-    const { limit = 5, page = 1 } = req.query;
+    const { limit = 25, page = 1, sort = "asc", search = "" } = req.query;
 
     // Assuming you have a ProductManager2 and responsePaginate functions defined
     const products = await ProductManager2.get(limit, page, sort, search);
@@ -43,6 +46,8 @@ router.get("/profile", async (req, res) => {
       res.render("products", {
         ...result,
         name,
+        user,
+
         title: "Lista de productos"
       });
     } else {
@@ -79,10 +84,10 @@ router.get("/logout", (req, res) => {
   });
 });
 
-router.get("/cartsview/:cid", async (req, res) => {
+router.get("/cartsview/:cid", ensureAuthenticated, async (req, res) => {
   try {
     const { cid } = req.params;
-    const cart = await cartManager.getById(cid);
+    const cart = await cartManager.getById({ cid });
     console.log(cart);
 
     if (!cart) {

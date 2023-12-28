@@ -14,22 +14,16 @@
 
   <h2>hola como estas {{name}}</h2>
   <h1>Productos</h1>
+
+  <header>
+    <a href="/cartsview/{{user}}" role="button">mostrar carrito</a>
+  </header>
   <article>
     <table>
       <tr>
         <th>title</th>
         <th>size</th>
 
-        <th>
-          Price
-          <form action="/profile" method="get">
-            <label for="sort">Ordenar por:</label>
-            <select name="sort" id="sort" onchange="this.form.submit()">
-              <option value="asc">Mayor precio</option>
-              <option value="desc">Menor precio</option>
-            </select>
-          </form>
-        </th>
         <th>accion</th>
       </tr>
       {{#each payload}}

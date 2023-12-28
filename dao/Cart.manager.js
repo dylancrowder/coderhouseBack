@@ -7,15 +7,20 @@ export default class CartsModel {
     return cartsModel.find();
   }
 
-  static async getById(sid) {
+  static async getById(cid) {
     try {
-      const cart = await cartsModel.findById(sid).populate("products.product");
-      if (!cart) {
-        throw new Error("Carrito no encontrado");
+      console.log(cid);
+      const user = await cartsModel
+        .findOne({ user: cid })
+        .populate("products.product"); // Aquí podría ser necesario ajustar a .populate("user cart products.product");
+
+      if (!user) {
+        throw new Error("Usuario no encontrado");
       }
-      return cart;
+
+      return user;
     } catch (error) {
-      throw new Error("Error al obtener el carrito: " + error.message);
+      throw new Error("Error al obtener el usuario: " + error.message);
     }
   }
 
@@ -51,28 +56,6 @@ export default class CartsModel {
     }
   }
 
-  static async create(userId, data) {
-    try {
-      // Crea el carrito
-      const cart = await cartsModel.create(data);
-      console.log("Carrito creado");
-
-      // Asigna el carrito al usuario
-      await userRegisterModel.findByIdAndUpdate(
-        userId,
-        { cart: cart._id },
-        { new: true }
-      );
-
-      console.log("Carrito asignado al usuario");
-
-      return cart;
-    } catch (error) {
-      console.error("Error al crear el carrito", error);
-      throw error;
-    }
-  }
-
   static async updateById(sid, data) {
     await cartsModel.updateOne({ _id: sid }, { $set: data });
     console.log("carrito actualizado correctamente");
@@ -81,43 +64,6 @@ export default class CartsModel {
   static async deleteById(sid) {
     await cartsModel.deleteOne({ _id: sid });
     console.log("carrito eliminado correctamente");
-  }
-
-  static async addProductToCart(cartId, productId) {
-    try {
-      const cart = await cartsModel.findById(cartId);
-
-      if (!cart) {
-        const newCart = await this.cartsModel.create(data);
-        newCart.products.push({ product: productId, quantity: 1 });
-        await newCart.save();
-
-        console.log(
-          "Producto agregado al carrito correctamente",
-          newCart.products
-        );
-      } else {
-        const existingProductIndex = cart.products.findIndex(
-          (item) => item.product.toString() === productId.toString()
-        );
-
-        if (existingProductIndex !== -1) {
-          cart.products[existingProductIndex].quantity += 1;
-        } else {
-          cart.products.push({ product: productId, quantity: 1 });
-        }
-
-        await cart.save();
-
-        console.log(
-          "Producto agregado al carrito correctamente",
-          cart.products
-        );
-      }
-    } catch (error) {
-      console.error(error.message);
-      throw error;
-    }
   }
 
   static async deleteProductCart(cartId, productId) {
@@ -187,20 +133,6 @@ export default class CartsModel {
     }
 
     return updatedCart;
-  }
-
-  static async createNewCart(cartId, productId, body) {
-    const newCart = await cartsModel.findByIdAndUpdate(
-      cartId,
-      {
-        $push: {
-          products: { product: productId, quantity: body }
-        }
-      },
-      { new: true, upsert: true }
-    );
-
-    return newCart;
   }
 
   static calculateCartTotal(cart) {

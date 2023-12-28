@@ -32,8 +32,7 @@ export const init = () => {
         last_name,
         email,
         age,
-        password: createHash(password),
-       
+        password: createHash(password)
       });
       done(null, newUser);
     })

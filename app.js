@@ -45,6 +45,9 @@ initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+
+
 app.use("/", productViewRouter, test);
 app.use("/api", productRouterApi, cartRouterApi, cookies, userLogin);
 
