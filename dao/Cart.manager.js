@@ -19,6 +19,38 @@ export default class CartsModel {
     }
   }
 
+  static async addToCart(userId, productId) {
+    try {
+      // Busca el usuario por su ID
+      const user = await userRegisterModel.findById(userId);
+
+      // Busca el carrito del usuario
+      let cart = await cartsModel.findOne({ user: user._id });
+
+      // Si el usuario no tiene un carrito, crea uno nuevo
+      if (!cart) {
+        cart = await cartsModel.create({ user: user._id, products: [] });
+      }
+
+      // Busca el producto por su ID
+      const product = await productModel.findById(productId);
+
+      // Agrega el producto al carrito
+      cart.products.push({ product: product._id, quantity: 1 });
+
+      // Guarda el carrito
+      await cart.save();
+
+      return {
+        success: true,
+        message: "Producto agregado al carrito con éxito."
+      };
+    } catch (error) {
+      console.error("Error al agregar el producto al carrito:", error);
+      return { success: false, error: "Error interno del servidor." };
+    }
+  }
+
   static async create(userId, data) {
     try {
       // Crea el carrito

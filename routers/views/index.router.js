@@ -18,15 +18,12 @@ router.get("/profile", async (req, res) => {
     const name = req.user.first_name;
     const role = req.user.role;
     const admin = "isAdmin";
-
+    const user = req.user._id;
+    console.log("este es el user", user);
     // Assuming that "Cart" is another Mongoose model
     const userWithCart = await userRegisterModel
       .findById(req.user._id)
       .populate("cart");
-
-    const userCart = userWithCart.cart
-
-    console.log("ESTE ES EL CARRITO ID", userCart);
 
     const sort = "desc";
     const search = 29.99;
@@ -37,7 +34,7 @@ router.get("/profile", async (req, res) => {
     const products = await ProductManager2.get(limit, page, sort, search);
     const result = responsePaginate({
       ...products,
-      cart: userCart ? userCart.products : [], // Make sure userCart is defined
+      user,
       sort,
       search
     });
@@ -46,13 +43,13 @@ router.get("/profile", async (req, res) => {
       res.render("products", {
         ...result,
         name,
-        cart: userCart,
         title: "Lista de productos"
       });
     } else {
       res.render("products", {
         ...result,
         admin,
+        user,
         name,
         title: "Lista de productos"
       });
@@ -102,6 +99,24 @@ router.get("/cartsview/:cid", async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).render("error", { message: "Error al obtener el carrito" });
+  }
+});
+
+router.post("/add-to-cart/:productId", async (req, res) => {
+  // Verifica si el usuario está autenticado
+  if (!req.isAuthenticated()) {
+    return res.status(401).json({ error: "Usuario no autenticado" });
+  }
+  const { productId } = req.params;
+  // Obtiene el ID del usuario desde la sesión
+  const userId = req.user._id;
+
+  const result = await cartManager.addToCart(userId, productId);
+
+  if (result.success) {
+    return res.json({ message: result.message });
+  } else {
+    return res.status(500).json({ error: result.error });
   }
 });
 

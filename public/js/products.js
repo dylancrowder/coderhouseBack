@@ -11,11 +11,6 @@
     });
   });
 
-  
-
-
-
-
   async function buyProduct(productId) {
     try {
       console.log("Product ID to be purchased:", productId);
@@ -36,10 +31,7 @@
         body: JSON.stringify(dataProduct)
       };
 
-      const responseCart = await fetch(
-        `/api/carts/656808add3f301ce9f870753/products/${productId}`,
-        options
-      );
+      const responseCart = await fetch(`/add-to-cart/${productId}`, options);
 
       if (!responseCart.ok) {
         throw new Error("Failed to add product to the cart");

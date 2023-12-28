@@ -1,6 +1,8 @@
 import { Router } from "express";
 import cartManager from "../../dao/Cart.manager.js";
+import productsModel from "../../dao/models/products.model.js";
 import cartsModels from "../../dao/models/carts.models.js";
+import userRegisterModel from "../../dao/models/userRegister.model.js";
 const router = Router();
 
 /* obtiene todos los carritos */
@@ -36,6 +38,7 @@ router.post("/carts", async (req, res) => {
     let cart = await cartManager.create(userId, body);
 
     res.status(200).json(cart);
+    console.log("sdsds", userId);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ error: "Error al crear el carrito" });
@@ -100,6 +103,37 @@ router.delete("/carts/:cid", async (req, res) => {
   const { cid } = req.params;
   const deleteAllCart = await cartManager.deleteAll(cid);
   res.status(200).json(deleteAllCart);
+});
+
+router.post("/add-to-cart/:userId/:productId", async (req, res) => {
+  try {
+
+
+ 
+    const user = await userRegisterModel.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    // Paso 2: Buscar el producto por su ID
+    const product = await productsModel.findById(req.params.productId);
+    if (!product) {
+      return res.status(404).json({ message: "Producto no encontrado" });
+    }
+
+    // Paso 3: Agregar el producto al array de productos en el carrito del usuario
+    user.cart.products.push(product._id);
+
+    // Paso 4: Guardar el usuario actualizado
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ message: "Producto agregado al carrito con éxito" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error interno del servidor" });
+  }
 });
 
 export default router;

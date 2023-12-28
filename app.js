@@ -18,6 +18,7 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import { URI } from "./db/mongodb.js";
 import passport from "passport";
+import test from "./routers/api/testing.js"
 import { init as initPassport } from "./config/passportConfig.js";
 const SECRET = ",9O1z?Vq2yV0";
 
@@ -44,7 +45,7 @@ initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/", productViewRouter);
+app.use("/", productViewRouter, test);
 app.use("/api", productRouterApi, cartRouterApi, cookies, userLogin);
 
 const PORT = 8080;
