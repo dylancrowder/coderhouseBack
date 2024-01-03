@@ -40,8 +40,18 @@ export default class CartsModel {
       // Busca el producto por su ID
       const product = await productModel.findById(productId);
 
-      // Agrega el producto al carrito
-      cart.products.push({ product: product._id, quantity: 1 });
+      // Verifica si el producto ya está en el carrito
+      const existingProduct = cart.products.find((item) =>
+        item.product.equals(product._id)
+      );
+
+      if (existingProduct) {
+        // Si el producto ya está en el carrito, incrementa la cantidad
+        existingProduct.quantity += 1;
+      } else {
+        // Si el producto no está en el carrito, agrégalo con cantidad 1
+        cart.products.push({ product: product._id, quantity: 1 });
+      }
 
       // Guarda el carrito
       await cart.save();
