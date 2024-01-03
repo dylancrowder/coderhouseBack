@@ -87,7 +87,7 @@ router.get("/logout", (req, res) => {
 router.get("/cartsview/:cid", ensureAuthenticated, async (req, res) => {
   try {
     const { cid } = req.params;
-    const cart = await cartManager.getById({ cid });
+    const cart = await cartManager.getById(cid);
     console.log(cart);
 
     if (!cart) {

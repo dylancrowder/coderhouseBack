@@ -57,7 +57,7 @@ await initMongo(server);
 initChat(server);
 
 server.listen(PORT, () => {
-  console.log("CORRIENDO EL SERVIRDO");
+  console.log("el servidor funciona correctamente ");
 });
 
 
